@@ -3,7 +3,7 @@
 dbg?=0
 
 CXX = g++
-CXXFLAGS = -Wall
+CXXFLAGS = -Wall -pedantic
 
 ifeq (${dbg},1)
   CXXFLAGS+=-g
