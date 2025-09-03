@@ -3,7 +3,7 @@
 dbg?=0
 
 CXX = g++
-CXXFLAGS = -Wall -pedantic
+CXXFLAGS = -Wall -Werror -pedantic
 
 ifeq (${dbg},1)
   CXXFLAGS+=-g
@@ -24,14 +24,13 @@ dirs:
 
 
 ./build/texed: $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $< -lncurses
+	$(CXX) $(CXXFLAGS) $^ -o $@ -lncurses
 
 ./build/obj/%.o: ./src/%.cpp | dirs
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -I include
 
 
 clean:
-	rm -f texed
 	rm -rf ./build/
 
-.PHONY: dirs clean
+.PHONY: dirs clean all
