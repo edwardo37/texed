@@ -1,14 +1,25 @@
 #include <ncurses.h>
+#include <iostream>
 
-int main() {
-    initscr();
+#include "texed/textFile.h"
 
-    start_color();
+int main(int argc, char** argv) {
+    // initscr();
 
-    // Code goes here
+    // start_color();
 
-    getch();
+    // // Code goes here
 
-    endwin();
+    // getch();
+
+    // endwin();
+
+
+    texed::textFile myTextFile(argv[1]);
+
+    myTextFile.buffer.push_back("Hello, World!");
+
+    myTextFile.writeBuffer();
+
     return 0;
 }
