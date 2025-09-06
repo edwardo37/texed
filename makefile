@@ -14,23 +14,28 @@ endif
 
 SRCS := $(wildcard ./src/*.cpp)
 OBJS := $(patsubst ./src/%.cpp,./build/obj/%.o,$(SRCS))
+DEPS := $(OBJS:.o=.d)
+
+BUILD_DIR ?= ./build
+
+all: $(BUILD_DIR)/bin/texed
 
 
-all: ./build/texed
+$(BUILD_DIR)/bin/texed: $(OBJS)
+	$(CXX) $^ -o $@ -lncurses
+
+$(BUILD_DIR)/obj/%.o: ./src/%.cpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -Iinclude -MMD -MP
 
 
-dirs:
-	mkdir -p ./build/obj
+$(BUILD_DIR):
+	@mkdir -p ./build/obj ./build/bin
 
 
-./build/texed: $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@ -lncurses
-
-./build/obj/%.o: ./src/%.cpp | dirs
-	$(CXX) $(CXXFLAGS) -c $< -o $@ -I include
+-include $(DEPS)
 
 
 clean:
-	rm -rf ./build/
+	rm -rf $(BUILD_DIR)
 
-.PHONY: dirs clean all
+.PHONY: clean all
